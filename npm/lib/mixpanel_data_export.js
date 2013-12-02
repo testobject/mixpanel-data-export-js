@@ -82,6 +82,10 @@ MixpanelExport = (function() {
     return this.get(["engage"], parameters);
   };
 
+  MixpanelExport.prototype.export = function(parameters) {
+    return this.get(["export"], parameters);
+  };
+
   MixpanelExport.prototype.get = function(method, parameters) {
     var result;
     result = {
@@ -94,7 +98,11 @@ MixpanelExport = (function() {
         var _this = this;
         this.req.open("get", this.request_url, true);
         this.req.onload = function() {
-          result = JSON.parse(_this.req.responseText);
+          try {
+            result = JSON.parse(_this.req.responseText);
+          } catch (e) {
+            result = _this.req.responseText;
+          }
           return _this.done(result);
         };
         return this.req.send();
